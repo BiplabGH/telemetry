@@ -29,9 +29,11 @@ namespace SampleEventGenerator
 
             var random = new Random();
             var spin = new ConsoleSpiner();
+            int flag = 0;
 
-            var eventHubClient = EventHubClient.CreateFromConnectionString("Endpoint=sb://simulator.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=JpwAvSGfHx1/Ic9TRd6DswiLwk2a7irWVUvHtGLk5Zo=;EntityPath=vital");
-
+            //var eventHubClient = EventHubClient.CreateFromConnectionString("Endpoint=sb://simulator.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=JpwAvSGfHx1/Ic9TRd6DswiLwk2a7irWVUvHtGLk5Zo=;EntityPath=vital");
+            var eventHubClient = EventHubClient.CreateFromConnectionString("Endpoint=sb://shalmoli.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Sc0uW2v6O41ZSFBEIRwNJHUY+b1A2WXz8nkQzx+ajd8=;EntityPath=shalmoli");
+            //Endpoint=sb://shalmoli.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Sc0uW2v6O41ZSFBEIRwNJHUY+b1A2WXz8nkQzx+ajd8=
             while (true)
             {
                 spin.Turn();
@@ -95,10 +97,14 @@ namespace SampleEventGenerator
 
                     // serialize the message to JSON
                     var json = ModelManager.ModelToJson(deviceReading);
-
-                    // send the message to EventHub
                     Console.WriteLine(json);
-                    eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(json)));
+                    // send the message to EventHub
+                    if (flag == 30)
+                    {
+                        Console.WriteLine("Data is sent to Event hub");
+                        eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(json)));
+                        flag = 0;
+                    }
 
                 }
                 catch (Exception exception)
@@ -110,6 +116,7 @@ namespace SampleEventGenerator
                 //Dispose once all HttpClient calls are complete. This is not necessary if the containing object will be disposed of; for example in this case the HttpClient instance will be disposed automatically when the application terminates so the following call is superfluous.
 
                 Thread.Sleep(2000);
+                flag++;
             }
         }
     }
