@@ -97,12 +97,15 @@ namespace SampleEventGenerator
 
                     // serialize the message to JSON
                     var json = ModelManager.ModelToJson(deviceReading);
-                    Console.WriteLine(json);
+
+                    string json1 = Json.json;
+
+                    Console.WriteLine(json1);
                     // send the message to EventHub
                     if (flag == 30)
                     {
                         Console.WriteLine("Data is sent to Event hub");
-                        eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(json)));
+                        eventHubClient.SendAsync(new EventData(Encoding.UTF8.GetBytes(json1)));
                         flag = 0;
                     }
 
